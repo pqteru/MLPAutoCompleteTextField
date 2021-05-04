@@ -449,8 +449,7 @@ withAutoCompleteString:(NSString *)string
         [rootView insertSubview:self.autoCompleteTableView
                    belowSubview:self];
 #else
-        [self.superview insertSubview:self.autoCompleteTableView
-                         belowSubview:self];
+        [self.window addSubview:self.autoCompleteTableView];
 #endif
         [self.autoCompleteTableView setUserInteractionEnabled:YES];
         if(self.showTextFieldDropShadowWhenAutoCompleteTableIsOpen){
@@ -664,7 +663,7 @@ withAutoCompleteString:(NSString *)string
 - (void)setRoundedRectStyleForAutoCompleteTableView
 {
     [self setAutoCompleteTableCornerRadius:8.0];
-    [self setAutoCompleteTableOriginOffset:CGSizeMake(0, -18)];
+    [self setAutoCompleteTableOriginOffset:CGSizeMake(0, 0)];
     [self setAutoCompleteScrollIndicatorInsets:UIEdgeInsetsMake(18, 0, 0, 0)];
     [self setAutoCompleteContentInsets:UIEdgeInsetsMake(18, 0, 0, 0)];
     
@@ -922,7 +921,7 @@ withAutoCompleteString:(NSString *)string
                                  completionHandler:^(NSArray *suggestions){
                                      
                                      [operation performSelector:@selector(didReceiveSuggestions:) withObject:suggestions];
-                                     dispatch_semaphore_signal(sentinelSemaphore);
+                dispatch_semaphore_signal(self->sentinelSemaphore);
                                  }];
             
             dispatch_semaphore_wait(sentinelSemaphore, DISPATCH_TIME_FOREVER);
